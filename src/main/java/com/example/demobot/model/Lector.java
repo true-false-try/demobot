@@ -26,5 +26,5 @@ public class Lector {
     private LectorDegree degree;
 
     @OneToMany(mappedBy = "lector", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Department> departmen;
+    private Set<Department> departments;
 }

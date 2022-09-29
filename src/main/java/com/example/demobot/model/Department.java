@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "departments")
@@ -23,7 +23,7 @@ public class Department {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private DepartmentName departmentNames;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -3,5 +3,5 @@ VOLUME /tmp
 WORKDIR .
 COPY ./ ./
 COPY target/*.jar app_demobot.jar
-EXPOSE 8091
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app_demobot.jar"]
