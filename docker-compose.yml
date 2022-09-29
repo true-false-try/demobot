@@ -1,0 +1,21 @@
+version: '1.0'
+services:
+  app_demobot:
+    build: .
+    links:
+      - postgres
+    ports:
+      - "8091:8091"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: 'postgres:13'
+    container_name: 'base'
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_CLIENT_USER}
+      POSTGRES_PASSWORD: ${DB_CLIENT_PWD}
+      POSTGRES_DB: ${DB_NAME}
