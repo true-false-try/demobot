@@ -25,6 +25,16 @@ public class Lector {
     @Column(name = "degree", nullable = false)
     private LectorDegree degree;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "surname", nullable = false)
+    private String surname;
+
+    @Column(name = "salary", nullable = false)
+    private Long salary;
+
     @OneToMany(mappedBy = "lector", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Department> departments;
+
 }

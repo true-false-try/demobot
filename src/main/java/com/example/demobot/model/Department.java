@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "departments")
 @Data
@@ -25,6 +24,9 @@ public class Department {
     @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
     private DepartmentName departmentNames;
+
+    @Column(name = "head_departments", nullable = false)
+    private Boolean headOfDepartments;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lector_id", referencedColumnName = "id")
