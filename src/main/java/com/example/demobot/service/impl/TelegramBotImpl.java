@@ -42,6 +42,7 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
 
             Optional<DepartmentName> statisticResponse = parseMessage(message,1);
             Optional<DepartmentName> headOfDepartmentResponse = parseMessage(message,5);
+            Optional<DepartmentName> avgSalaryResponse = parseMessage(message,7);
 
             if (statisticResponse.isPresent()) {
                 startCommand(chatId, responseStatistic(statisticResponse.get()));
@@ -49,8 +50,11 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
             else if (headOfDepartmentResponse.isPresent()) {
                 startCommand(chatId, responseHeadOfDepartments(headOfDepartmentResponse.get()));
             }
+            else if (avgSalaryResponse.isPresent()) {
+                startCommand(chatId, responseAvgSalaryOfDepartmentName(avgSalaryResponse.get()));
+            }
             else {
-                sendMessage(chatId, "Sorry command don't use");
+                sendMessage(chatId, "Sorry, but this command don't find");
             }
 
         }
@@ -82,6 +86,15 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
         return stringBuilder.toString();
     }
 
+    @Override
+    public String responseAvgSalaryOfDepartmentName(DepartmentName name) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Long avgSalary = repository.avgSalaryOfDepartmentName(name);
+        stringBuilder.append("The average salary of ").append(name).append(" is ").append(avgSalary);
+
+        return stringBuilder.toString();
+    }
+
     Optional<DepartmentName> parseMessage(String message, int number) {
         String[] array;
         Optional<DepartmentName> name = Optional.empty();
@@ -91,7 +104,6 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
         } catch (NullPointerException | ArrayIndexOutOfBoundsException ex) {
             log.error(ex.getMessage());
         }
-
 
         return name;
     }

@@ -15,8 +15,10 @@ public interface TelegramBot {
             LectorDegree.PROFESSOR
     ));
     //1
-   String responseHeadOfDepartments(DepartmentName name);
+    String responseHeadOfDepartments(DepartmentName name);
     //2
-   String responseStatistic(DepartmentName name);
+    String responseStatistic(DepartmentName name);
+    //3
+    String responseAvgSalaryOfDepartmentName(DepartmentName name);
 
 }
