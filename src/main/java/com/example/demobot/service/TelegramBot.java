@@ -18,5 +18,7 @@ public interface TelegramBot extends TemplateMessage {
     String responseAvgSalaryOfDepartmentName(DepartmentName name);
     //4
     String responseCountEmployeeForDepartmentName(DepartmentName name);
+    //5
+    String responseGlobalSearch(String str);
 
 }
