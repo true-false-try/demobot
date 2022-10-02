@@ -27,10 +27,9 @@ public interface TemplateMessage {
             if (arrayInput.length == arrayDefault.length) {
                 for (int i = 0; i < arrayDefault.length; i++) {
                     if (arrayDefault[i].equals(arrayInput[i])) {
-                        if (arrayDefault[i + 1].equals("{department_name}")){
+                        if (arrayDefault[i + 1].equals("{department_name}") || arrayDefault[i + 1].equals("{template}")) {
                             return entry.getKey();
                         }
-
                     }
                 }
             }
