@@ -24,5 +24,9 @@ public interface DepartmentDAO extends JpaRepository<Department,Long>, CrudRepos
     @Query("select avg(l.salary) from Department d inner join d.lector l where d.departmentNames = :departmentName")
     Long avgSalaryOfDepartmentName(@Param("departmentName") DepartmentName name);
 
+    @Query("select count(l) from Department d inner join  d.lector l where d.departmentNames = :departmentName")
+    Long countForEmployeeForDepartmentName(@Param("departmentName") DepartmentName name);
+
+
 
 }

@@ -16,6 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.*;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -40,36 +41,46 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
             String message =  update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            Optional<DepartmentName> statisticResponse = parseMessage(message,1);
-            Optional<DepartmentName> headOfDepartmentResponse = parseMessage(message,5);
-            Optional<DepartmentName> avgSalaryResponse = parseMessage(message,7);
+            int result = isTheSame(message);
+            try {
 
-            if (statisticResponse.isPresent()) {
-                startCommand(chatId, responseStatistic(statisticResponse.get()));
-            }
-            else if (headOfDepartmentResponse.isPresent()) {
-                startCommand(chatId, responseHeadOfDepartments(headOfDepartmentResponse.get()));
-            }
-            else if (avgSalaryResponse.isPresent()) {
-                startCommand(chatId, responseAvgSalaryOfDepartmentName(avgSalaryResponse.get()));
-            }
-            else {
-                sendMessage(chatId, "Sorry, but this command don't find");
-            }
+                switch (result) {
+                    case 1:
+                        Optional<DepartmentName> headOfDepartmentResponse = parseMessage(message, 5);
+                        startCommand(chatId, responseHeadOfDepartments(headOfDepartmentResponse.get()));
+                        break;
+                    case 2:
+                        Optional<DepartmentName> statisticResponse = parseMessage(message, 1);
+                        startCommand(chatId, responseStatistic(statisticResponse.get()));
+                        break;
+                    case 3:
+                        Optional<DepartmentName> avgSalaryResponse = parseMessage(message, 7);
+                        startCommand(chatId, responseAvgSalaryOfDepartmentName(avgSalaryResponse.get()));
+                        break;
 
+                    case 4:
+                        Optional<DepartmentName> countEmployee = parseMessage(message, 5);
+                        startCommand(chatId, responseCountEmployeeForDepartmentName(countEmployee.get()));
+                        break;
+                    case 5:
+                        break;
+
+                    default:
+                        sendMessage(chatId, "Sorry, but this command don't find");
+
+                }
+            } catch (NoSuchElementException ex) {
+                log.error(ex.getMessage());
+                sendMessage(chatId, ex.getMessage());
+            }
         }
     }
 
     @Override
     public String responseHeadOfDepartments(DepartmentName name) {
         StringBuilder stringBuilder = new StringBuilder();
-        Lector lector;
-        try {
-            lector = repository.headOfDepartment(name).get();
-            stringBuilder.append("Head of ").append(name).append(" department is ").append(lector.getName()).append(" ").append(lector.getSurname());
-        } catch (NoSuchElementException ex) {
-            log.error(ex.getMessage());
-        }
+        Lector lector = repository.headOfDepartment(name).get();
+        stringBuilder.append("Head of ").append(name).append(" department is ").append(lector.getName()).append(" ").append(lector.getSurname());
 
         return stringBuilder.toString();
     }
@@ -93,6 +104,11 @@ public class TelegramBotImpl extends TelegramLongPollingBot implements TelegramB
         stringBuilder.append("The average salary of ").append(name).append(" is ").append(avgSalary);
 
         return stringBuilder.toString();
+    }
+
+    @Override
+    public String responseCountEmployeeForDepartmentName(DepartmentName name) {
+        return String.valueOf(repository.countForEmployeeForDepartmentName(name));
     }
 
     Optional<DepartmentName> parseMessage(String message, int number) {
